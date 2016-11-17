@@ -1,0 +1,11 @@
+
+$ scp -i /f/mos/keys/vpnkey.pem openvpn-install-unattend.sh root@192.161.17.130:~
+
+$ scp -i /f/mos/keys/vpnkey.pem root@192.161.17.130:~/client1.ovpn /f/client1.ovpn
+$ scp -i /f/mos/keys/vpnkey.pem root@192.161.17.130:~/client1.ovpn /d/Program\ Files\ \(x86\)/OpenVPN/config/mos-192.161.17.130\(client1\)/client1.ovpn
+
+$ openstack stack create -t openvpn.heat vpn-stack1
+
+$ openstack stack delete vpn-stack1
+
+$ ssh -i /f/mos/keys/vpnkey.pem root@192.161.17.130
