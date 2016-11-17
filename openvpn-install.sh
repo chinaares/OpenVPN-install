@@ -7,9 +7,9 @@
 # your Debian/Ubuntu/CentOS box. It has been designed to be as unobtrusive and
 # universal as possible.
 
-export http_proxy=http://192.166.69.12:1818
-export https_proxy=$http_proxy
-export ftp_proxy=$http_proxy
+#export http_proxy=http://192.166.69.12:1818
+#export https_proxy=$http_proxy
+#export ftp_proxy=$http_proxy
 #Ladder Proxy
 #export http_proxy=http://192.161.14.24:5885
 #export https_proxy=$http_proxy
@@ -49,7 +49,7 @@ elif [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
 	chmod +x /etc/rc.d/rc.local
 else
 	echo "Looks like you aren't running this installer on a Debian, Ubuntu or CentOS system"
-	exit 4
+	exit 5
 fi
 
 newclient () {
