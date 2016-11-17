@@ -9,3 +9,14 @@ $ openstack stack create -t openvpn.heat vpn-stack1
 $ openstack stack delete vpn-stack1
 
 $ ssh -i /f/mos/keys/vpnkey.pem root@192.161.17.130
+
+
+root@openvpn-instance:~# tail -10f /var/log/cloud-init-output.log
+
+# netstat -nlu
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+udp        0      0 0.0.0.0:43916           0.0.0.0:*                          
+udp        0      0 0.0.0.0:68              0.0.0.0:*                          
+udp        0      0 0.0.0.0:1194            0.0.0.0:*                          
+udp6       0      0 :::13282                :::*       
