@@ -7,6 +7,14 @@
 # your Debian/Ubuntu/CentOS box. It has been designed to be as unobtrusive and
 # universal as possible.
 
+export http_proxy=http://192.166.69.12:1818
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+#Ladder Proxy
+#export http_proxy=http://192.161.14.24:5885
+#export https_proxy=$http_proxy
+#export ftp_proxy=$http_proxy
+
 
 if [[ "$EUID" -ne 0 ]]; then
 	echo "Sorry, you need to run this as root"
@@ -68,7 +76,7 @@ newclient () {
 # and to avoid getting an IPv6.
 IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 if [[ "$IP" = "" ]]; then
-	IP=$(wget -qO- ipv4.icanhazip.com)
+	IP=$(wget -qO- 192.161.14.24)
 fi
 
 
@@ -210,7 +218,7 @@ else
 	echo "   4) DNS.WATCH"
 	echo "   5) OpenDNS"
 	echo "   6) Google"
-	read -p "DNS [1-6]: " -e -i 2 DNS
+	read -p "DNS [1-6]: " -e -i 1 DNS
 	echo ""
 	echo "Some setups (e.g. Amazon Web Services), require use of MASQUERADE rather than SNAT"
 	echo "Which forwarding method do you want to use [if unsure, leave as default]?"
@@ -233,26 +241,32 @@ else
 		# We add the OpenVPN repo to get the latest version.
 		# Debian 7
 		if [[ "$VERSION_ID" = 'VERSION_ID="7"' ]]; then
-			echo "deb http://swupdate.openvpn.net/apt wheezy main" > /etc/apt/sources.list.d/swupdate-openvpn.list
-			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
+			echo "deb http://192.161.14.179/openvpn/ wheezy main" > /etc/apt/sources.list.d/swupdate-openvpn.list
+			wget -O - http://192.161.14.179/openvpn/repo-public.gpg | apt-key add -
 			apt-get update
 		fi
 		# Debian 8
 		if [[ "$VERSION_ID" = 'VERSION_ID="8"' ]]; then
-			echo "deb http://swupdate.openvpn.net/apt jessie main" > /etc/apt/sources.list.d/swupdate-openvpn.list
-			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
+			echo "deb http://192.161.14.179/openvpn/ jessie main" > /etc/apt/sources.list.d/swupdate-openvpn.list
+			wget -O - http://192.161.14.179/openvpn/repo-public.gpg | apt-key add -
 			apt update
 		fi
 		# Ubuntu 12.04
 		if [[ "$VERSION_ID" = 'VERSION_ID="12.04"' ]]; then
-			echo "deb http://swupdate.openvpn.net/apt precise main" > /etc/apt/sources.list.d/swupdate-openvpn.list
-			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
+			echo "deb http://192.161.14.179/openvpn/ precise main" > /etc/apt/sources.list.d/swupdate-openvpn.list
+			wget -O - http://192.161.14.179/openvpn/repo-public.gpg | apt-key add -
 			apt-get update
 		fi
 		# Ubuntu 14.04
 		if [[ "$VERSION_ID" = 'VERSION_ID="14.04"' ]]; then
-			echo "deb http://swupdate.openvpn.net/apt trusty main" > /etc/apt/sources.list.d/swupdate-openvpn.list
-			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
+			echo "deb http://192.161.14.179/openvpn/ trusty main" > /etc/apt/sources.list.d/swupdate-openvpn.list
+			wget -O - http://192.161.14.179/openvpn/repo-public.gpg | apt-key add -
+			apt-get update
+		fi
+		# Ubuntu 16.04
+		if [[ "$VERSION_ID" = 'VERSION_ID="16.04"' ]]; then
+			echo "deb http://192.161.14.179/openvpn/ xenial main" > /etc/apt/sources.list.d/swupdate-openvpn.list
+			wget -O - http://192.161.14.179/openvpn/repo-public.gpg | apt-key add -
 			apt-get update
 		fi
 		# The repo, is not available for Ubuntu 15.10 and 16.04, but it has OpenVPN > 2.3.3, so we do nothing.
@@ -441,8 +455,9 @@ tls-auth tls-auth.key 0" >> /etc/openvpn/server.conf
 		fi
 	fi
 	# Try to detect a NATed connection and ask about it to potential LowEndSpirit/Scaleway users
-	EXTERNALIP=$(wget -qO- ipv4.icanhazip.com)
-	if [[ "$IP" != "$EXTERNALIP" ]]; then
+	#EXTERNALIP=$(wget -qO- ipv4.icanhazip.com)
+    EXTERNALIP=$(wget -qO- 192.161.14.24)
+   	if [[ "$IP" != "$EXTERNALIP" ]]; then
 		echo ""
 		echo "Looks like your server is behind a NAT!"
 		echo ""
